@@ -5,11 +5,11 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 // use global parser to remove html etc. tags
 import parse, { domToReact } from 'html-react-parser';
+import { useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 
 // Define markdown renderer for code block and images
-
 const renderer = new marked.Renderer();
 
 // handle code block highlights
@@ -26,7 +26,8 @@ renderer.link = ({ href, text }) => {
 
 // render paragraph preserving space and tabs
 renderer.paragraph = function ({ tokens }) {
-  return `<p class="pre-like">${this.parser.parseInline(tokens)}</p>\n`;
+  const pClass = this.options.pClass
+  return `<p class="${pClass}">${this.parser.parseInline(tokens)}</p>\n`;
 }
 
 // render images
@@ -41,13 +42,14 @@ marked.setOptions({
   breaks: true,
 });
 
-
 export default function MDView({ mdContent }) {
-
-  // console.log(marked.parse(mdContent))
-
+  // Dynamically decide main content class
+  const decodedPath = decodeURIComponent(useLocation().pathname);
+  const preClass = decodedPath.startsWith('/problems')? 'pre-like': '';
+  console.log(preClass)
+  
   const mdStr = useMemo(() => {
-    return parse(marked.parse(mdContent), {
+    return parse(marked.parse(mdContent, {pClass: preClass}), {
       // Open html, head, body tags from the parsed content, if any
       replace: (domNode) => {
         if (domNode.name === 'html' || domNode.name === 'head' || domNode.name === 'body') {

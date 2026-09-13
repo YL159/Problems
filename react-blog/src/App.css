@@ -1,17 +1,21 @@
-html, body, #root {
+:root {
     font-family:
         'Segoe UI', Tahoma, Geneva, Verdana,
         'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC',
         sans-serif;
     font-size: 1em;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box;
     min-height: 100vh;
     background-color:seashell;
 }
 
+*, ::before, ::after {
+    box-sizing: inherit;
+}
+
 /* Main content */
 main {
+    font-size: 1.12em;
     padding: 2em 2em 4em;
 }
 
@@ -51,8 +55,9 @@ pre {
 }
 
 /* .md text maintaining original tab like code block */
-.pre-like {
-    font-size: 1.12em;
+main p.pre-like {
+    font-family:"Consolas";
+    line-height: 1.2;
     white-space: pre-wrap;
     tab-size: 4;
 }
